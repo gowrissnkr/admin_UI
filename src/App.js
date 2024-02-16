@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import AdminData from "./Component/AdminData";
+import SearchBar from "./Component/SearchBar";
+import Pagination from "./Component/Pagination";
+import { useAdminData } from "./utils/useAdminData";
 
 function App() {
+  const {
+    handleChange,
+    handlePageChange,
+    handleSearch,
+    pageData,
+    searchFilterData,
+    pagesLength,
+    setCurrentPage,
+    currentPage,
+  } = useAdminData();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="w-[70%] mt-4 mx-auto font-mono">
+      <SearchBar handleSearch={handleSearch} />
+      <AdminData
+        adminData={pageData}
+        filteredData={searchFilterData}
+        handleChange={handleChange}
+      />
+      <Pagination
+        pagesLength={pagesLength}
+        handlePageChange={handlePageChange}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+      />
     </div>
   );
 }
