@@ -55,6 +55,7 @@ const Pagination = ({
             onClick={() => {
               setCurrentPage(index + 1);
             }}
+            key={index}
           >
             {index + 1}
           </button>

@@ -10,7 +10,8 @@ const AdminData = ({
   selectedCheckbox,
   handleSelect,
   deleteSingleData,
-  setShowModal
+  setShowModal,
+  handleEdit
 }) => {
   return (
     <>
@@ -44,6 +45,8 @@ const AdminData = ({
                   handleSelect={handleSelect}
                   deleteSingleData={deleteSingleData}
                   setShowModal = {setShowModal}
+                  handleEdit = {handleEdit}
+                  key={id}
                 />
               ))
             ) : (

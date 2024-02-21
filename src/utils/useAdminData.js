@@ -5,14 +5,13 @@ export const useAdminData = () => {
   const [initialData, setInitialData] = useState([]);
   const [searchFilterData, setSearchFilterData] = useState([]);
   const [selectedCheckbox, setSelectedCheckbox] = useState([]);
+  const [pageData, setPageData] = useState([]);
+  const [editData, setEditData] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const pageItems = currentPage * itemsPerPage;
   const itemPerPage = pageItems - itemsPerPage;
-  const pageData =
-    searchFilterData.length !== 0
-      ? searchFilterData.slice(itemPerPage, pageItems)
-      : initialData.slice(itemPerPage, pageItems);
   const pageLength =
     searchFilterData.length !== 0
       ? Math.ceil(searchFilterData.length / itemsPerPage)
@@ -24,7 +23,40 @@ export const useAdminData = () => {
     setInitialData(data);
   };
 
-  const handleChange = (event) => {};
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setEditData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveEditData = (e) => {
+    e.preventDefault();
+    console.log(editData);
+
+    const updatingData = (data, setData) => {
+      const updatedData = data.map((data) =>
+        data.id === editData.id ? editData : data
+      );
+      setData(updatedData);
+    };
+
+    updatingData(initialData, setInitialData);
+
+    if (searchFilterData.length > 0) {
+      updatingData(searchFilterData, setSearchFilterData);
+    }
+    if (pageData.length > 0) {
+      updatingData(pageData, setPageData);
+    }
+    setShowModal(false);
+    setEditData({});
+  };
+
+  const handleEdit = (id) => {
+    setShowModal(true);
+    console.log(id);
+    const edit = initialData.filter((data) => data.id === id);
+    setEditData(...edit);
+  };
 
   const handleSelect = (id) => {
     console.log(id);
@@ -52,7 +84,8 @@ export const useAdminData = () => {
       (item) => !selectedCheckbox.includes(item.id)
     );
     setInitialData(updatedData);
-    setCurrentPage(1)
+    setPageData(updatedData.slice(itemPerPage, pageItems));
+    setCurrentPage(1);
     setSelectedCheckbox([]);
   };
 
@@ -79,6 +112,14 @@ export const useAdminData = () => {
     setCurrentPage(1);
   }, [searchFilterData]);
 
+  useEffect(() => {
+    const data =
+      searchFilterData.length !== 0
+        ? searchFilterData.slice(itemPerPage, pageItems)
+        : initialData.slice(itemPerPage, pageItems);
+    setPageData(data);
+  }, [searchFilterData, itemPerPage, pageItems, initialData, selectedCheckbox]);
+
   return {
     handleChange,
     handleSearch,
@@ -91,5 +132,10 @@ export const useAdminData = () => {
     handleSelect,
     deleteSelected,
     deleteSingleData,
+    handleEdit,
+    showModal,
+    setShowModal,
+    editData,
+    handleSaveEditData,
   };
 };

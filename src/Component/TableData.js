@@ -11,7 +11,7 @@ const TableData = ({
   selectedCheckbox,
   handleSelect,
   deleteSingleData,
-  setShowModal,
+  handleEdit,
 }) => {
   return (
     <tr className="border-b-[1px] border-gray-300 pb-1 w-full" key={id}>
@@ -35,7 +35,9 @@ const TableData = ({
             src={EditIcon}
             alt="edit"
             width="18px"
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              handleEdit(id);
+            }}
           />
         </button>
         <button className="delete">

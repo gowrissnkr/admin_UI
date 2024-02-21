@@ -1,6 +1,11 @@
 import React from "react";
 
-const Modal = ({ setShowModal }) => {
+const Modal = ({
+  setShowModal,
+  editData,
+  handleChange,
+  handleSaveEditData,
+}) => {
   return (
     <div className="overflow-y-auto overflow-x-hidden z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full absolute">
       <div className="relative p-4 w-full max-w-md max-h-full mx-auto">
@@ -23,9 +28,9 @@ const Modal = ({ setShowModal }) => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                 />
               </svg>
@@ -47,6 +52,8 @@ const Modal = ({ setShowModal }) => {
                   id="name"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   placeholder="John"
+                  value={editData.name}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -63,6 +70,8 @@ const Modal = ({ setShowModal }) => {
                   id="email"
                   placeholder="name@company.com"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  value={editData.email}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -80,15 +89,18 @@ const Modal = ({ setShowModal }) => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   placeholder="member || admin"
                   required
+                  value={editData.role}
+                  onChange={handleChange}
                 />
               </div>
               <div className="flex justify-between">
                 <button
                   className="text-white bg-green-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  onClick={handleSaveEditData}
                 >
                   Save
                 </button>
-                <button 
+                <button
                   className="text-white bg-red-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
                   onClick={() => setShowModal(false)}
                 >
