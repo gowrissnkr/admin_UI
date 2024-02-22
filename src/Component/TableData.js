@@ -12,6 +12,7 @@ const TableData = ({
   handleSelect,
   deleteSingleData,
   handleEdit,
+  setShowModal,
 }) => {
   return (
     <tr className="border-b-[1px] border-gray-300 pb-1 w-full" key={id}>
@@ -24,9 +25,7 @@ const TableData = ({
           }}
         />
       </td>
-      <td className="pr-[70px] py-[5px]">
-        <input value={name} onChange={handleChange} />
-      </td>
+      <td className="pr-[70px] py-[5px]">{name}</td>
       <td className="pr-[70px] py-[2px]">{email}</td>
       <td className="pr-[70px] py-[2px]">{role}</td>
       <td className="pr-[100px] flex justify-center items-center gap-2 pt-[5px]">
@@ -37,6 +36,7 @@ const TableData = ({
             width="18px"
             onClick={() => {
               handleEdit(id);
+              setShowModal(true);
             }}
           />
         </button>

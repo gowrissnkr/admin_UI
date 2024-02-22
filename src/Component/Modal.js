@@ -6,6 +6,11 @@ const Modal = ({
   handleChange,
   handleSaveEditData,
 }) => {
+  const handleSave = (e) => {
+    e.preventDefault();
+    handleSaveEditData(e);
+    setShowModal(false);
+  };
   return (
     <div className="overflow-y-auto overflow-x-hidden z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full absolute">
       <div className="relative p-4 w-full max-w-md max-h-full mx-auto">
@@ -13,8 +18,7 @@ const Modal = ({
           <div className="flex items-center justify-between p-2 rounded-t dark:border-gray-600">
             <button
               type="button"
-              className="end-2.5 text-gray-400 bg-transparent rounded-lg text-sm w-8 h-4 ms-auto inline-flex justify-center items-center "
-              data-modal-hide="authentication-modal"
+              className="end-2.5 text-gray-400 bg-transparent rounded-lg text-sm w-8 h-4 ms-auto inline-flex justify-center items-center"
               onClick={() => {
                 setShowModal(false);
               }}
@@ -96,7 +100,9 @@ const Modal = ({
               <div className="flex justify-between">
                 <button
                   className="text-white bg-green-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  onClick={handleSaveEditData}
+                  onClick={(e) => {
+                    handleSave(e);
+                  }}
                 >
                   Save
                 </button>

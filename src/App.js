@@ -24,33 +24,41 @@ function App() {
     handleSaveEditData,
   } = useAdminData();
 
+  const opacity = showModal ? "opacity-[0.5]" : "opacity-100";
+
   return (
     <div className="w-[70%] mt-4 mx-auto font-mono relative">
-      <div className={showModal ? "opacity-[0.5]" : "opacity-100"}>
+      <div className={opacity}>
         <SearchBar handleSearch={handleSearch} />
         <AdminData
-          adminData={pageData}
-          handleChange={handleChange}
-          handleAllChange={handleAllChange}
-          selectedCheckbox={selectedCheckbox}
-          handleSelect={handleSelect}
-          deleteSingleData={deleteSingleData}
-          setShowModal={setShowModal}
-          handleEdit={handleEdit}
+          {...{
+            adminData: pageData ,
+            handleAllChange,
+            handleChange,
+            handleSelect,
+            deleteSingleData,
+            setShowModal,
+            handleEdit,
+            selectedCheckbox,
+          }}
         />
         <Pagination
-          pagesLength={pageLength}
-          setCurrentPage={setCurrentPage}
-          currentPage={currentPage}
-          deleteSelected={deleteSelected}
+          {...{
+            pageLength,
+            setCurrentPage,
+            currentPage,
+            deleteSelected,
+          }}
         />
       </div>
       {showModal && (
         <Modal
-          setShowModal={setShowModal}
-          editData={editData}
-          handleChange={handleChange}
-          handleSaveEditData={handleSaveEditData}
+          {...{
+            editData,
+            setShowModal,
+            handleChange,
+            handleSaveEditData,
+          }}
         />
       )}
     </div>

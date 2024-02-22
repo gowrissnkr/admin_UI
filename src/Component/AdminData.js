@@ -11,19 +11,22 @@ const AdminData = ({
   handleSelect,
   deleteSingleData,
   setShowModal,
-  handleEdit
+  handleEdit,
 }) => {
   return (
     <>
       <div className="mt-[10px] w-full h-[400px]">
         <table>
-          <tbody>
+          <tbody className="w-full">
             <tr className="border-b-[1px] border-gray-300 w-full">
               <td className="pr-[100px]">
                 <input
                   type="checkbox"
                   onChange={handleAllChange}
-                  checked={selectedCheckbox.length === adminData.length}
+                  checked={
+                    adminData !== null &&
+                    selectedCheckbox.length === adminData.length
+                  }
                 />
               </td>
               <td className="pr-[70px] py-[2px]">Name</td>
@@ -31,7 +34,7 @@ const AdminData = ({
               <td className="pr-[70px] py-[2px]">Role</td>
               <td className="pr-[100px] py-[2px]">Actions</td>
             </tr>
-            {adminData !== null ? (
+            {adminData !== null && adminData.length > 0 ? (
               adminData.map(({ name, id, email, role }) => (
                 <TableData
                   name={name}
@@ -44,13 +47,17 @@ const AdminData = ({
                   selectedCheckbox={selectedCheckbox.includes(id)}
                   handleSelect={handleSelect}
                   deleteSingleData={deleteSingleData}
-                  setShowModal = {setShowModal}
-                  handleEdit = {handleEdit}
+                  setShowModal={setShowModal}
+                  handleEdit={handleEdit}
                   key={id}
                 />
               ))
             ) : (
-              <div>No Data Found</div>
+              <tr>
+                <td colSpan={5} className="text-center">
+                  No Data Found
+                </td>
+              </tr>
             )}
           </tbody>
         </table>

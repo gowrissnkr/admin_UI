@@ -1,129 +1,146 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FETCH_ADMIN_DATA_URL } from "../Constant/fetchUrl";
 
 export const useAdminData = () => {
-  const [initialData, setInitialData] = useState([]);
-  const [searchFilterData, setSearchFilterData] = useState([]);
+  const [adminData, setAdminData] = useState({
+    initialData: [],
+    searchFilterData: [],
+    pageData: [],
+    editData: {},
+    showModal: false,
+    currentPage: 1,
+  });
   const [selectedCheckbox, setSelectedCheckbox] = useState([]);
-  const [pageData, setPageData] = useState([]);
-  const [editData, setEditData] = useState({});
-  const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const pageItems = currentPage * itemsPerPage;
   const itemPerPage = pageItems - itemsPerPage;
   const pageLength =
-    searchFilterData.length !== 0
-      ? Math.ceil(searchFilterData.length / itemsPerPage)
-      : Math.ceil(initialData.length / itemsPerPage);
+    adminData.searchFilterData !== null
+      ? adminData.searchFilterData.length > 0
+        ? Math.ceil(adminData.searchFilterData.length / itemsPerPage)
+        : Math.ceil(adminData.initialData.length / itemsPerPage)
+      : 0;
 
-  const fetchInitialData = async () => {
+  const fetchInitialData = useCallback(async () => {
     const response = await fetch(FETCH_ADMIN_DATA_URL);
     const data = await response.json();
-    setInitialData(data);
-  };
+    setAdminData((prev) => ({
+      ...prev,
+      initialData: data,
+      pageData: data.slice(itemPerPage, pageItems),
+    }));
+  }, [itemPerPage,pageItems]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setEditData((prev) => ({ ...prev, [name]: value }));
+    console.log(name);
+    setAdminData((prev) => ({
+      ...prev,
+      editData: { ...prev.editData, [name]: value },
+    }));
   };
+
+  const updatingData = useCallback(
+    (updatedData) => {
+      setAdminData((prev) => ({
+        ...prev,
+        initialData: updatedData,
+        searchFilterData: updatedData,
+        pageData: updatedData.slice(itemPerPage, pageItems),
+      }));
+    },
+    [itemPerPage, pageItems]
+  );
 
   const handleSaveEditData = (e) => {
     e.preventDefault();
-    console.log(editData);
-
-    const updatingData = (data, setData) => {
-      const updatedData = data.map((data) =>
-        data.id === editData.id ? editData : data
-      );
-      setData(updatedData);
-    };
-
-    updatingData(initialData, setInitialData);
-
-    if (searchFilterData.length > 0) {
-      updatingData(searchFilterData, setSearchFilterData);
-    }
-    if (pageData.length > 0) {
-      updatingData(pageData, setPageData);
-    }
-    setShowModal(false);
-    setEditData({});
+    const updateData = adminData.initialData.map((data) =>
+      data.id === adminData.editData.id ? adminData.editData : data
+    );
+    updatingData(updateData);
+    setAdminData((prev) => ({ ...prev, editData: {} }));
   };
 
   const handleEdit = (id) => {
-    setShowModal(true);
     console.log(id);
-    const edit = initialData.filter((data) => data.id === id);
-    setEditData(...edit);
+    const [edit] = adminData.initialData.filter((data) => data.id === id);
+    setAdminData((prev) => ({ ...prev, editData: edit }));
   };
 
   const handleSelect = (id) => {
-    console.log(id);
-    console.log(selectedCheckbox);
-    setSelectedCheckbox((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((prevIds) => prevIds !== id);
-      } else {
-        return [...prev, id];
-      }
-    });
+    setSelectedCheckbox((prev) =>
+      prev.includes(id)
+        ? prev.filter((prevIds) => prevIds !== id)
+        : [...prev, id]
+    );
   };
 
   const handleAllChange = () => {
-    const selectAllCheckbox = pageData.map((adminData) => adminData.id);
-    setSelectedCheckbox(
-      selectedCheckbox.length === selectAllCheckbox.length
-        ? []
-        : selectAllCheckbox
+    const selectAllCheckbox = adminData.pageData.map(
+      (adminData) => adminData.id
+    );
+    setSelectedCheckbox((prev) =>
+      prev.length === selectAllCheckbox.length ? [] : selectAllCheckbox
     );
   };
 
   const deleteSelected = () => {
-    const updatedData = initialData.filter(
+    const updatedData = adminData.initialData.filter(
       (item) => !selectedCheckbox.includes(item.id)
     );
-    setInitialData(updatedData);
-    setPageData(updatedData.slice(itemPerPage, pageItems));
+    updatingData(updatedData);
     setCurrentPage(1);
     setSelectedCheckbox([]);
   };
 
   const deleteSingleData = (id) => {
-    const updatedData = initialData.filter((item) => item.id !== id);
-    setInitialData(updatedData);
+    const updatedData = adminData.initialData.filter((item) => item.id !== id);
+    updatingData(updatedData);
   };
 
   const handleSearch = (event) => {
     const { value } = event.target;
-    const filterData = initialData.filter(
+    const filterData = adminData.initialData.filter(
       (data) =>
         data.name.includes(value) ||
         data.email.includes(value) ||
         data.role.includes(value)
     );
-    setSearchFilterData(filterData);
+    setAdminData((prev) => ({
+      ...prev,
+      searchFilterData: filterData.length > 0 ? filterData : null,
+      pageData: filterData.slice(itemPerPage, pageItems),
+    }));
   };
   useEffect(() => {
     fetchInitialData();
-  }, []);
+  }, [fetchInitialData]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchFilterData]);
+  }, [adminData.searchFilterData]);
 
   useEffect(() => {
     const data =
-      searchFilterData.length !== 0
-        ? searchFilterData.slice(itemPerPage, pageItems)
-        : initialData.slice(itemPerPage, pageItems);
-    setPageData(data);
-  }, [searchFilterData, itemPerPage, pageItems, initialData, selectedCheckbox]);
+      adminData.searchFilterData === null
+        ? null
+        : adminData.searchFilterData.length > 0
+        ? adminData.searchFilterData.slice(itemPerPage, pageItems)
+        : adminData.initialData.slice(itemPerPage, pageItems);
+    setAdminData((prev) => ({ ...prev, pageData: data }));
+  }, [
+    adminData.searchFilterData,
+    itemPerPage,
+    pageItems,
+    adminData.initialData,
+    selectedCheckbox,
+  ]);
 
   return {
     handleChange,
     handleSearch,
-    pageData,
+    pageData: adminData.pageData,
     pageLength,
     currentPage,
     setCurrentPage,
@@ -133,9 +150,10 @@ export const useAdminData = () => {
     deleteSelected,
     deleteSingleData,
     handleEdit,
-    showModal,
-    setShowModal,
-    editData,
+    showModal: adminData.showModal,
+    setShowModal: (showValue) =>
+      setAdminData((prev) => ({ ...prev, showModal: showValue })),
+    editData: adminData.editData,
     handleSaveEditData,
   };
 };

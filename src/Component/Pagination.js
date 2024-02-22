@@ -1,12 +1,29 @@
 import React from "react";
 
 const Pagination = ({
-  pagesLength,
+  pageLength,
   setCurrentPage,
   currentPage,
   deleteSelected,
 }) => {
-  return pagesLength === 0 ? (
+  const pageNumberButtons = () => {
+    const buttons = [];
+    for (let i = 0; i < pageLength; i++) {
+      buttons.push(
+        <button
+          className="bg-blue-600 rounded px-4 text-white"
+          onClick={() => {
+            setCurrentPage(i + 1);
+          }}
+          key={i}
+        >
+          {i + 1}
+        </button>
+      );
+    }
+    return buttons;
+  };
+  return pageLength === 0 ? (
     <div className="mt-4 flex items-center">
       <button
         className="bg-red-600 text-white font-bold py-1 px-4 rounded w-[20%]"
@@ -48,19 +65,8 @@ const Pagination = ({
             </button>
           </>
         )}
-
-        {[...Array(pagesLength).keys()].map((_, index) => (
-          <button
-            className="bg-blue-600 rounded px-4 text-white"
-            onClick={() => {
-              setCurrentPage(index + 1);
-            }}
-            key={index}
-          >
-            {index + 1}
-          </button>
-        ))}
-        {currentPage !== pagesLength && (
+        {pageNumberButtons()}
+        {currentPage !== pageLength && (
           <>
             <button
               className="bg-blue-600 rounded px-4 text-white next-page"
@@ -73,7 +79,7 @@ const Pagination = ({
             <button
               className="bg-blue-600 rounded px-4 text-white last-page"
               onClick={() => {
-                setCurrentPage(pagesLength);
+                setCurrentPage(pageLength);
               }}
             >
               {">>"}
