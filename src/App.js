@@ -6,61 +6,23 @@ import Modal from "./Component/Modal";
 
 function App() {
   const {
-    handleChange,
+    adminPageDataComponentProps,
+    paginationComponentProps,
+    modalComponentProps,
     handleSearch,
-    pageData,
-    pageLength,
-    currentPage,
-    setCurrentPage,
-    handleAllChange,
-    selectedCheckbox,
-    handleSelect,
-    deleteSelected,
-    deleteSingleData,
-    handleEdit,
-    setShowModal,
     showModal,
-    editData,
-    handleSaveEditData,
   } = useAdminData();
 
-  const opacity = showModal ? "opacity-[0.5]" : "opacity-100";
+  const containerOpacity = showModal ? "opacity-[0.5]" : "opacity-100";
 
   return (
     <div className="w-[70%] mt-4 mx-auto font-mono relative">
-      <div className={opacity}>
+      <div className={containerOpacity}>
         <SearchBar handleSearch={handleSearch} />
-        <AdminData
-          {...{
-            adminData: pageData ,
-            handleAllChange,
-            handleChange,
-            handleSelect,
-            deleteSingleData,
-            setShowModal,
-            handleEdit,
-            selectedCheckbox,
-          }}
-        />
-        <Pagination
-          {...{
-            pageLength,
-            setCurrentPage,
-            currentPage,
-            deleteSelected,
-          }}
-        />
+        <AdminData {...adminPageDataComponentProps} />
+        <Pagination {...paginationComponentProps} />
       </div>
-      {showModal && (
-        <Modal
-          {...{
-            editData,
-            setShowModal,
-            handleChange,
-            handleSaveEditData,
-          }}
-        />
-      )}
+      {showModal && <Modal {...modalComponentProps} />}
     </div>
   );
 }

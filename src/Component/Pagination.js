@@ -6,7 +6,7 @@ const Pagination = ({
   currentPage,
   deleteSelected,
 }) => {
-  const pageNumberButtons = () => {
+  const generatePageButtons = () => {
     const buttons = [];
     for (let i = 0; i < pageLength; i++) {
       buttons.push(
@@ -24,7 +24,7 @@ const Pagination = ({
     return buttons;
   };
   return pageLength === 0 ? (
-    <div className="mt-4 flex items-center">
+    <div className="lg:mt-4 flex items-center lg:flex-row flex-col">
       <button
         className="bg-red-600 text-white font-bold py-1 px-4 rounded w-[20%]"
         onClick={deleteSelected}
@@ -36,7 +36,7 @@ const Pagination = ({
       </div>
     </div>
   ) : (
-    <div className="mt-4 flex items-center">
+    <div className="lg:mt-4 flex items-center lg:flex-row flex-col">
       <button
         className="bg-red-600 text-white font-bold py-1 px-4 rounded w-[20%]"
         onClick={deleteSelected}
@@ -65,7 +65,7 @@ const Pagination = ({
             </button>
           </>
         )}
-        {pageNumberButtons()}
+        {generatePageButtons()}
         {currentPage !== pageLength && (
           <>
             <button

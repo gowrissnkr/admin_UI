@@ -1,19 +1,12 @@
 import React from "react";
+import EditIcon from "../assets/images/editing.png";
+import DeleteIcon from "../assets/images/trash.png";
 
-const TableData = ({
-  name,
-  handleChange,
-  id,
-  email,
-  role,
-  EditIcon,
-  DeleteIcon,
-  selectedCheckbox,
-  handleSelect,
-  deleteSingleData,
-  handleEdit,
-  setShowModal,
-}) => {
+const TableData = ({ data, tableDataProps, selectedCheckbox }) => {
+  const { name, email, role, id } = data;
+  const { handleSelect, deleteSingleData, handleEdit, setShowModal } =
+    tableDataProps;
+
   return (
     <tr className="border-b-[1px] border-gray-300 pb-1 w-full" key={id}>
       <td className="pr-[100px] py-[2px]">

@@ -1,12 +1,9 @@
 import React from "react";
-import EditIcon from "../assets/images/editing.png";
-import DeleteIcon from "../assets/images/trash.png";
 import TableData from "./TableData";
 
 const AdminData = ({
-  adminData,
-  handleChange,
-  handleAllChange,
+  pageData,
+  handleAllSelect,
   selectedCheckbox,
   handleSelect,
   deleteSingleData,
@@ -22,10 +19,10 @@ const AdminData = ({
               <td className="pr-[100px]">
                 <input
                   type="checkbox"
-                  onChange={handleAllChange}
+                  onChange={handleAllSelect}
                   checked={
-                    adminData !== null &&
-                    selectedCheckbox.length === adminData.length
+                    pageData !== null &&
+                    selectedCheckbox.length === pageData.length
                   }
                 />
               </td>
@@ -34,22 +31,18 @@ const AdminData = ({
               <td className="pr-[70px] py-[2px]">Role</td>
               <td className="pr-[100px] py-[2px]">Actions</td>
             </tr>
-            {adminData !== null && adminData.length > 0 ? (
-              adminData.map(({ name, id, email, role }) => (
+            {pageData !== null && pageData.length > 0 ? (
+              pageData.map((data) => (
                 <TableData
-                  name={name}
-                  id={id}
-                  email={email}
-                  role={role}
-                  EditIcon={EditIcon}
-                  DeleteIcon={DeleteIcon}
-                  handleChange={handleChange}
-                  selectedCheckbox={selectedCheckbox.includes(id)}
-                  handleSelect={handleSelect}
-                  deleteSingleData={deleteSingleData}
-                  setShowModal={setShowModal}
-                  handleEdit={handleEdit}
-                  key={id}
+                  data={data}
+                  tableDataProps={{
+                    handleSelect,
+                    handleEdit,
+                    deleteSingleData,
+                    setShowModal,
+                  }}
+                  selectedCheckbox={selectedCheckbox.includes(data.id)}
+                  key={data.id}
                 />
               ))
             ) : (

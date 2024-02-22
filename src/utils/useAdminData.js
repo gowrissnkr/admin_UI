@@ -30,9 +30,9 @@ export const useAdminData = () => {
       initialData: data,
       pageData: data.slice(itemPerPage, pageItems),
     }));
-  }, [itemPerPage,pageItems]);
+  }, [itemPerPage, pageItems]);
 
-  const handleChange = (event) => {
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
     console.log(name);
     setAdminData((prev) => ({
@@ -76,7 +76,7 @@ export const useAdminData = () => {
     );
   };
 
-  const handleAllChange = () => {
+  const handleAllSelect = () => {
     const selectAllCheckbox = adminData.pageData.map(
       (adminData) => adminData.id
     );
@@ -138,22 +138,30 @@ export const useAdminData = () => {
   ]);
 
   return {
-    handleChange,
+    adminPageDataComponentProps: {
+      pageData: adminData.pageData,
+      handleAllSelect,
+      handleSelect,
+      deleteSingleData,
+      setShowModal: (showValue) =>
+        setAdminData((prev) => ({ ...prev, showModal: showValue })),
+      handleEdit,
+      selectedCheckbox,
+    },
+    paginationComponentProps: {
+      pageLength,
+      setCurrentPage,
+      currentPage,
+      deleteSelected,
+    },
+    modalComponentProps: {
+      editData: adminData.editData,
+      setShowModal: (showValue) =>
+        setAdminData((prev) => ({ ...prev, showModal: showValue })),
+      handleInputChange,
+      handleSaveEditData,
+    },
     handleSearch,
-    pageData: adminData.pageData,
-    pageLength,
-    currentPage,
-    setCurrentPage,
-    handleAllChange,
-    selectedCheckbox,
-    handleSelect,
-    deleteSelected,
-    deleteSingleData,
-    handleEdit,
     showModal: adminData.showModal,
-    setShowModal: (showValue) =>
-      setAdminData((prev) => ({ ...prev, showModal: showValue })),
-    editData: adminData.editData,
-    handleSaveEditData,
   };
 };

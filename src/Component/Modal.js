@@ -3,7 +3,7 @@ import React from "react";
 const Modal = ({
   setShowModal,
   editData,
-  handleChange,
+  handleInputChange,
   handleSaveEditData,
 }) => {
   const handleSave = (e) => {
@@ -57,7 +57,7 @@ const Modal = ({
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   placeholder="John"
                   value={editData.name}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -75,7 +75,7 @@ const Modal = ({
                   placeholder="name@company.com"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   value={editData.email}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -94,7 +94,7 @@ const Modal = ({
                   placeholder="member || admin"
                   required
                   value={editData.role}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex justify-between">
